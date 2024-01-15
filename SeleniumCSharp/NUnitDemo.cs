@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using SeleniumCSharp.Pages;
 using System;
+using System.Collections.Generic;
 
 namespace SeleniumCSharp
 {
@@ -47,6 +48,30 @@ namespace SeleniumCSharp
         public void TestBrowserVersion(string browser, string version)
         {
             Console.WriteLine($"The browser is {browser} with version {version}");
+        }
+
+
+        [Test]
+        [TestCaseSource(nameof(Login))]
+        public void TestCaseSourveDataDriven(LoginModel loginModel)
+        {
+            LoginPage loginPage = new LoginPage(_driver);
+            loginPage.ClickLogin();
+            loginPage.Login(loginModel.username, loginModel.password);
+        }
+
+        public static IEnumerable<LoginModel> Login()
+        {
+            yield return new LoginModel()
+            {
+                username = "admin",
+                password = "password",
+            };
+            yield return new LoginModel()
+            {
+                username = "admin1",
+                password = "password1",
+            };
         }
     }
 }
